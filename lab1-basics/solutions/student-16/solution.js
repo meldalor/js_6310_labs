@@ -51,28 +51,26 @@ function calculate(a, b, operation) {
 function calculateArea(figure, ...params) {
     // 2.4 Напишите функцию для определения площади фигур 'circle', 'rectangle', 'triangle'
     // Используйте switch.
-    if (figure !== 'circle' && figure !== 'rectangle' && figure !== 'triangle') {
-        return "Неизвестная фигура";
-    }
     switch (figure) {
         case "circle":
             if (params.length !== 1) {
-                return "Для круга требуется один параметр (радиус)";
+                break;
             }
             return Math.PI * params[0]**2;
         case "rectangle":
             if (params.length !== 2) {
-                return "Для прямоугольника требуется два параметра (ширина, высота)";
+                break;
             }
             return params[0]*params[1];
         case "triangle":
             if (params.length !== 3) {
-                return "Для треугольника требуется три параметра (две стороны и угол между ними)";
+                break;
             }
             return 0.5*params[0]*params[1]*Math.sin(params[2]);
         default:
             return "Площадь такой фигуры считать пока не умеем";
     }
+    return "некорректные входные данные";
 }
 
 // 2.5 Стрелочные функции
