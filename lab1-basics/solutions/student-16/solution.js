@@ -160,6 +160,7 @@ function processArrays() {
     const victoria = users.find(user => user.name === 'Виктория'); 
     console.log(victoria);
     
+    
     // 5. Используйте reduce для подсчета суммы всех чисел
     const sum = numbers.reduce((res, elem) => res + elem, 0);
     console.log(sum);
@@ -384,6 +385,9 @@ function runTests() {
     const newAvgGrade = student.getAverageGrade();
     console.assert(newAvgGrade !== avgGrade, "Тест пересчета среднего балла провален");
     
+    //задание 4 тесты
+    processArrays();
+
     // Тест 9: taskManager
     const initialTasksCount = taskManager.tasks.length;
     const newTask = taskManager.addTask("Тестовая задача", "low");
