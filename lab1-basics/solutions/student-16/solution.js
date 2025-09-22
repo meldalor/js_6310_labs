@@ -195,6 +195,7 @@ function processArrays() {
     const victoria = users.find(user => user.name === 'Виктория'); 
     console.log(victoria);
     
+    
     // 5. Используйте reduce для подсчета суммы всех чисел
     const sum = numbers.reduce((res, elem) => res + elem, 0);
     console.log(sum);
@@ -414,6 +415,7 @@ function runTests() {
     processArrays();
     
     // Тест 11: taskManager
+
     const initialTasksCount = taskManager.tasks.length;
     const newTask = taskManager.addTask("Тестовая задача", "low");
     console.assert(taskManager.tasks.length === initialTasksCount + 1, "Тест addTask провален");
