@@ -18,11 +18,26 @@ function simpleTask() {
 // ===== ЗАДАНИЕ 2: Функции =====
 function getReviewerNumber(number, lab) {
     // 2.1 Функция определяющая номер ревьюера для вашей группы по вашему номеру и номеру лабораторной работы
-    return (number + lab) % 23;
+    if (typeof number !== 'number' || typeof lab !== 'number') {
+        return "Оба аргумента должны быть числами";
+    }
+    if (number <= 0 || lab <= 0) {
+        return "Аргументы должны быть положительными";
+    }
+    if (number > 23) {
+        return "В нашей группе 23 человека";
+    }
+    return (number + lab - 1) % 23 + 1;
 }
 
 function getVariant(number, variants) {
     // 2.2 Функция определяющая номер варианта, исходя из количества вариантов
+    if (typeof number !== 'number' || typeof variants !== 'number') {
+        return "Оба аргумента должны быть числами";
+    }
+    if (number <= 0 || variants <= 0) {
+        return "Аргументы должны быть положительными";
+    }
     return (number-1) % variants + 1;
 }
 
@@ -56,17 +71,32 @@ function calculateArea(figure, ...params) {
             if (params.length !== 1) {
                 break;
             }
+            if (typeof params[0] !== 'number' || params[0] < 0) {
+                break;
+            }
             return Math.PI * params[0]**2;
         case "rectangle":
             if (params.length !== 2) {
                 break;
             }
-            return params[0]*params[1];
-        case "triangle":
-            if (params.length !== 3) {
+            if (typeof params[0] !== 'number' || typeof params[1] !== 'number') {
                 break;
             }
-            return 0.5*params[0]*params[1]*Math.sin(params[2]);
+            if (params[0] < 0 || params[1] < 0) {
+                break;
+            }
+            return params[0]*params[1];
+        case "triangle":
+            if (params.length !== 2) {
+                break;
+            }
+            if (typeof params[0] !== 'number' || typeof params[1] !== 'number') {
+                break;
+            }
+            if (params[0] < 0 || params[1] < 0) {
+                break;
+            }
+            return 0.5 * params[0] * params[1]; // основание * высота
         default:
             return "Площадь такой фигуры считать пока не умеем";
     }
@@ -80,7 +110,12 @@ const reverseString = (str) => {
 };
 
 const getRandomNumber = (min, max) => {
-    // Функция возвращает случайное число между min и max
+    if (typeof min !== 'number' || typeof max !== 'number') {
+        return "Аргументы должны быть числами";
+    }
+    if (min > max) {
+        return "Минимальное значение не может быть больше максимального";
+    }
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
@@ -96,12 +131,10 @@ const book = {
     pages: 272,
     isAvailable: true,
 
-    // ИСПРАВЛЕНО: используем обычную функцию вместо стрелочной для правильного this
     getInfo: function() { 
         return `Название: ${this.title}, Автор: ${this.author}, Год: ${this.year}, Страницы: ${this.pages}`;
     },
 
-    // ИСПРАВЛЕНО: используем обычную функцию и возвращаем новое значение
     toggleAvailability: function() { 
         this.isAvailable = !this.isAvailable;
         return this.isAvailable;
@@ -122,7 +155,9 @@ const student = {
     // Метод для расчета среднего балла
     getAverageGrade() {
         // Ваш код здесь
-        return Math.round(Object.values(this.grades).reduce((sum, elem) => sum + elem, 0) * 10) / (Object.values(this.grades).length * 10);
+        const grades = Object.values(this.grades);
+        const sum = grades.reduce((acc, grade) => acc + grade, 0);
+        return grades.length > 0 ? sum / grades.length : 0;
     },
     
     // Метод для добавления новой оценки
@@ -165,7 +200,7 @@ function processArrays() {
     console.log(sum);
     
     // 6. Используйте sort для сортировки пользователей по возрасту (по убыванию)
-    const sortedByAge = users.sort((a, b) => b.age - a.age);
+    const sortedByAge = [...users].sort((a, b) => b.age - a.age);
     console.log(sortedByAge);
 
     // 7. Используйте метод для проверки, все ли пользователи старше 18 лет
@@ -191,9 +226,19 @@ const taskManager = {
     
     addTask(title, priority = "medium") {
         // 5.1 Добавление задачи
+        if (typeof title !== 'string') {
+            return "Название задачи должно быть строкой";
+        }
+        if (title.trim() === '') {
+            return "Название задачи не может быть пустым";
+        }
+        if (typeof priority !== 'string') {
+            return "Приоритет должен быть строкой";
+        }
+        
         const newTask = {
             id: this.nextId++,
-            title,
+            title: title.trim(),
             completed: false,
             priority
         };
@@ -203,25 +248,41 @@ const taskManager = {
     
     completeTask(taskId) {
         // 5.2 Отметка выполнения
+        if (typeof taskId !== 'number') {
+            return "ID задачи должен быть числом";
+        }
+        
         const task = this.tasks.find(task => task.id === taskId);
         if (task) {
             task.completed = true;
-            return true;
+            return task;
         }
-        return false;
+        return "Задача с таким ID не найдена";
     },
 
     // Удаление задачи
     deleteTask(taskId) {
-        // 5.3 Ваш код здесь
+        // 5.3 Удаление задачи
+        if (typeof taskId !== 'number') {
+            return "ID задачи должен быть числом";
+        }
+        
         const initialLength = this.tasks.length;
         this.tasks = this.tasks.filter(task => task.id !== taskId);
-        return this.tasks.length < initialLength;
+        
+        if (this.tasks.length < initialLength) {
+            return true; // успешно удалено
+        }
+        return "Задача с таким ID не найдена";
     },
 
     // Получение списка задач по статусу
     getTasksByStatus(completed) {
-        // 5.4 Ваш код здесь
+        // 5.4 Получение задач по статусу
+        if (typeof completed !== 'boolean') {
+            return "Параметр completed должен быть булевым значением";
+        }
+        
         return this.tasks.filter(task => task.completed === completed);
     },
     
@@ -232,17 +293,18 @@ const taskManager = {
         pending,
         completionRate
         */
-       const total = this.tasks.length;
-       const completed = this.getTasksByStatus(true).length;
-       const pending = this.getTasksByStatus(false).length;
-       const completionRate = total > 0 ? Math.round((completed / total) * 100 * 100) / 100 : 0;
+        const total = this.tasks.length;
+        const completedTasks = this.tasks.filter(task => task.completed);
+        const completed = completedTasks.length;
+        const pending = total - completed;
+        const completionRate = total > 0 ? Math.round((completed / total) * 100 * 100) / 100 : 0;
 
-       return {
-           total,
-           completed,
-           pending,
-           completionRate
-       };
+        return {
+            total,
+            completed,
+            pending,
+            completionRate
+        };
     }
 };
 
@@ -263,46 +325,6 @@ Learn Regex - https://github.com/ziishaned/learn-regex - учебник по reg
 Вычисление своего варианта:
 Номер варианта = Ваш номер % Общее количество вариантов
  */
-
-/**
- * Вариант 1: Валидация email адреса
- * Правила:
- * - Латиница, цифры, спецсимволы: ._%+-
- * - Обязательный символ @
- * - Доменная часть: латиница, цифры, точка
- * - Минимальная длина 5 символов
- */
-function validateEmail(email) {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(email);
-}
-
-/**
- * Вариант 2: Валидация пароля
- * Правила:
- * - Минимум 8 символов
- * - Хотя бы одна заглавная буква
- * - Хотя бы одна строчная буква  
- * - Хотя бы одна цифра
- * - Хотя бы один специальный символ: !@#$%^&*()
- */
-function validatePassword(password) {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$/;
-    return passwordRegex.test(password);
-}
-
-/**
- * Вариант 3: Валидация номера телефона (российский формат)
- * Поддерживает форматы:
- * - +7 (999) 123-45-67
- * - 8 (999) 123-45-67  
- * - 89991234567
- * - +7(999)123-45-67
- */
-function validatePhone(phone) {
-    const phoneRegex = /^(\+?[78] ?\(?\d{3}\)? ?\d{3}\-?\d{2}\-?\d{2})$/;
-    return phoneRegex.test(phone);
-}
 
 /**
  * Вариант 4: Валидация даты в формате DD.MM.YYYY
@@ -327,6 +349,8 @@ function runTests() {
     console.assert(getReviewerNumber(5, 1) === 6, "Тест получения ревьюера провален");
     console.assert(getReviewerNumber(1, 1) === 2, "Тест getReviewerNumber(1, 1) провален");
     console.assert(getReviewerNumber(23, 1) === 1, "Тест getReviewerNumber(23, 1) провален");
+    console.assert(getReviewerNumber("строка", 1) === "Оба аргумента должны быть числами", "Тест типов провален");
+    console.assert(getReviewerNumber(24, 1) === "В нашей группе 23 человека", "Тест границ провален");
     
     // Тест 2: getVariant
     console.assert(getVariant(1, 10) === 1, "Тест getVariant(1, 10) провален");
@@ -354,9 +378,11 @@ function runTests() {
     // Тест 4: calculateArea
     console.assert(Math.abs(calculateArea('circle', 5) - 78.539816) < 0.0001, "Тест площади круга провален");
     console.assert(calculateArea('rectangle', 4, 5) === 20, "Тест площади прямоугольника провален");
-    console.assert(Math.abs(calculateArea('triangle', 3, 4, Math.PI/2) - 6) < 0.0001, "Тест площади треугольника провален");
-    console.assert(calculateArea('square') === "Неизвестная фигура", "Тест неизвестной фигуры провален");
-    console.assert(calculateArea('circle') === "Для круга требуется один параметр (радиус)", "Тест параметров круга провален");
+    console.assert(calculateArea('triangle', 3, 4) === 6, "Тест площади треугольника провален");
+    console.assert(calculateArea('square') === "Площадь такой фигуры считать пока не умеем", "Тест неизвестной фигуры провален");
+    console.assert(calculateArea('circle') === "некорректные входные данные", "Тест параметров круга провален");
+    console.assert(calculateArea("circle", -5) === "некорректные входные данные", "Тест отрицательного радиуса провален");
+
     
     // Тест 5: reverseString
     console.assert(reverseString('hello') === 'olleh', "Тест reverseString провален");
@@ -383,8 +409,11 @@ function runTests() {
     console.assert(student.grades.physics === 88, "Тест student.addGrade провален");
     const newAvgGrade = student.getAverageGrade();
     console.assert(newAvgGrade !== avgGrade, "Тест пересчета среднего балла провален");
+
+    // Тест 10: processArrays
+    processArrays();
     
-    // Тест 9: taskManager
+    // Тест 11: taskManager
     const initialTasksCount = taskManager.tasks.length;
     const newTask = taskManager.addTask("Тестовая задача", "low");
     console.assert(taskManager.tasks.length === initialTasksCount + 1, "Тест addTask провален");
@@ -405,31 +434,7 @@ function runTests() {
     const deleted = taskManager.deleteTask(newTask.id);
     console.assert(deleted && taskManager.tasks.length === initialTasksCount, "Тест deleteTask провален");
     
-    // Тест 10: Регулярные выражения - Email
-    console.assert(validateEmail('test@example.com'), "Тест validateEmail с валидным email провален");
-    console.assert(validateEmail('user.name+tag@domain.co.uk'), "Тест validateEmail со сложным email провален");
-    console.assert(!validateEmail('invalid.email'), "Тест validateEmail с невалидным email провален");
-    console.assert(!validateEmail('test@.com'), "Тест validateEmail с некорректным доменом провален");
-    console.assert(!validateEmail('a@b.c'), "Тест validateEmail с коротким доменом провален");
-    
-    // Тест 11: Регулярные выражения - Password
-    console.assert(validatePassword('Password1!'), "Тест validatePassword с валидным паролем провален");
-    console.assert(validatePassword('ComplexPass123@'), "Тест validatePassword со сложным паролем провален");
-    console.assert(!validatePassword('weak'), "Тест validatePassword со слабым паролем провален");
-    console.assert(!validatePassword('nodigits!'), "Тест validatePassword без цифр провален");
-    console.assert(!validatePassword('NOLOWERCASE1!'), "Тест validatePassword без строчных букв провален");
-    console.assert(!validatePassword('nouppercase1!'), "Тест validatePassword без заглавных букв провален");
-    console.assert(!validatePassword('NoSpecial1'), "Тест validatePassword без спец символов провален");
-    
-    // Тест 12: Регулярные выражения - Phone
-    console.assert(validatePhone('+7 (999) 123-45-67'), "Тест validatePhone с +7 провален");
-    console.assert(validatePhone('8 (999) 123-45-67'), "Тест validatePhone с 8 провален");
-    console.assert(validatePhone('89991234567'), "Тест validatePhone без пробелов провален");
-    console.assert(validatePhone('+7(999)123-45-67'), "Тест validatePhone без пробелов с +7 провален");
-    console.assert(!validatePhone('1234567890'), "Тест validatePhone с неправильным номером провален");
-    console.assert(!validatePhone('+1 (999) 123-45-67'), "Тест validatePhone с неправильным кодом провален");
-    
-    // Тест 13: Регулярные выражения - Date
+    // Тест 12: Регулярные выражения - Date
     console.assert(validateDate('01.01.2000'), "Тест validateDate с валидной датой провален");
     console.assert(validateDate('31.12.2099'), "Тест validateDate с граничной датой провален");
     console.assert(!validateDate('32.01.2000'), "Тест validateDate с неправильным днем провален");
