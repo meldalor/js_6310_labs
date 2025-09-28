@@ -2,37 +2,37 @@
 
 // ===== ЗАДАНИЕ 1: Базовый класс Vehicle =====
 class Vehicle {
-    // Создайте базовый класс Vehicle.
-    // В конструкторе принимайте и сохраняйте в this свойства: 
-    // make (марка), model (модель), year (год выпуска).
+
     constructor(make, model, year) {
         Vehicle.vehicleCount++;
 
+        // Проверки типов данных
         if (typeof make !== 'string' || !make) throw new Error('make должно быть непустой строкой');
         if (typeof model !== 'string' || !model) throw new Error('model должна быть непустой строкой');
         if (typeof year !== 'number') throw new Error('year должен быть числом');
-        
+
         this.make = make;
         this.model = model;
-        this.year = year;
+
+        const currentYear = new Date().getFullYear();
+        if (year > currentYear) {
+            throw new Error("Год выпуска не может быть больше текущего");
+        }
+        this._year = year;
     }
 
-    // Добавьте метод displayInfo(), который выводит в консоль информацию 
-    // о транспортном средстве в формате: "Марка: [make], Модель: [model], Год: [year]".
     displayInfo() {
-        console.log(`Марка: ${this.make}, Модель: ${this.model}, Год: ${this.year}`);
+        console.log(`Марка: ${this.make}, Модель: ${this.model}, Год: ${this._year}`);
     }
 
-    // Добавьте геттер age, который возвращает возраст транспортного средства 
-    // (текущий год минус год выпуска). Используйте new Date().getFullYear().
     get age() {
-        return new Date().getFullYear() - this.year;
+        return new Date().getFullYear() - this._year;
     }
 
-    // Добавьте сеттер для года выпуска с проверкой: год не может быть больше текущего.
     set year(newYear) {
         if (typeof newYear !== 'number') throw new Error('year должен быть числом');
-        if (newYear > new Date().getFullYear()) {
+        const currentYear = new Date().getFullYear();
+        if (newYear > currentYear) {
             throw new Error("год не может быть больше текущего");
         }
         this._year = newYear;
@@ -42,8 +42,6 @@ class Vehicle {
         return this._year;
     }
 
-    // Добавьте статический метод compareAge(vehicle1, vehicle2), 
-    // который возвращает разницу в возрасте между двумя транспортными средствами.
     static compareAge(vehicle1, vehicle2) {
         if (!vehicle1 || !vehicle2) throw new Error('Оба транспортных средства должны существовать');
         if (typeof vehicle1.age !== 'number' || typeof vehicle2.age !== 'number') {
@@ -53,64 +51,52 @@ class Vehicle {
     }
 }
 
-// ===== ЗАДАНИЕ 2: Класс Car (наследуется от Vehicle) =====
+// ===== ЗАДАНИЕ 2: Класс Car =====
 class Car extends Vehicle {
-    // Создайте дочерний класс Car, который наследуется от Vehicle.
-    // Добавьте новое свойство numDoors (количество дверей).
     constructor(make, model, year, numDoors) {
         super(make, model, year);
         
-        // Проверка numDoors
+        // Проверки типов данных
         if (typeof numDoors !== 'number') throw new Error('numDoors должно быть числом');
         if (numDoors < 1) throw new Error('numDoors должно быть положительным числом');
         
         this.numDoors = numDoors;
     }
 
-    // Переопределите метод displayInfo() так, чтобы он также выводил количество дверей. 
-    // Используйте super.displayInfo() для вызова метода родителя.
     displayInfo() {
         super.displayInfo();
         console.log(`Количество дверей: ${this.numDoors}`);
     }
 
-    // Добавьте метод honk(), который выводит "Beep beep!".
     honk() {
         console.log("Beep beep!");
+        return "Beep beep!"; // для тестов
     }
 }
 
-// ===== ЗАДАНИЕ 3: Класс ElectricCar (наследуется от Car) =====
+// ===== ЗАДАНИЕ 3: Класс ElectricCar =====
 class ElectricCar extends Car {
-    // Создайте дочерний класс ElectricCar, который наследуется от Car.
-    // Добавьте новое свойство batteryCapacity (емкость батареи в кВт·ч).
     constructor(make, model, year, numDoors, batteryCapacity) {
         super(make, model, year, numDoors);
         
-        // Проверка batteryCapacity
+        // Проверки типов данных
         if (typeof batteryCapacity !== 'number') throw new Error('batteryCapacity должно быть числом');
         if (batteryCapacity < 0) throw new Error('batteryCapacity не может быть отрицательным');
         
         this.batteryCapacity = batteryCapacity;
     }
 
-    // Переопределите метод displayInfo() для вывода дополнительной информации о батарее.
     displayInfo() {
         super.displayInfo();
-        console.log(`Емкость батареи: ${this.batteryCapacity} кВт·ч`);
+        console.log(`Ёмкость батареи: ${this.batteryCapacity} кВт·ч`);
     }
 
-    // Добавьте метод calculateRange(), который рассчитывает примерный запас хода 
-    // (предположим, что 1 кВт·ч = 6 км).
     calculateRange() {
         return this.batteryCapacity * 6;
     }
 }
 
 // ===== ЗАДАНИЕ 4: Каррирование =====
-
-// Создайте функцию createVehicleFactory, которая возвращает функцию 
-// для создания транспортных средств определенного типа (каррирование).
 const createVehicleFactory = (vehicleType) => {
     // Проверка типа
     if (typeof vehicleType !== 'function') throw new Error('vehicleType должен быть конструктором');
@@ -120,15 +106,7 @@ const createVehicleFactory = (vehicleType) => {
     };
 };
 
-// ===== ЗАДАНИЕ 5: Статические методы и свойства =====
-
-// Добавьте статическое свойство vehicleCount в класс Vehicle 
-// для подсчета количества созданных транспортных средств.
-// Модифицируйте конструктор Vehicle для увеличения счетчика
-// (добавьте в начало конструктора: Vehicle.vehicleCount++);
-// Создайте статический метод getTotalVehicles(), 
-// который возвращает общее количество созданных транспортных средств.
-Vehicle.vehicleCount = 0;
+Vehicle.vehicleCount = 0;		
 Vehicle.getTotalVehicles = () => Vehicle.vehicleCount;
 
 // ===== ТЕСТЫ =====
@@ -276,30 +254,113 @@ function runTests() {
     console.assert(zeroRangeEV.calculateRange() === 0, 'Запас хода с нулевой батареей должен быть 0');
     console.log(`Запас хода с батареей 0 кВт·ч: ${zeroRangeEV.calculateRange()} км`);
 
-    // ===== ТЕСТ 8: Оригинальные требования из задания =====
-    console.log('\n--- ТЕСТ 8: Оригинальные требования ---');
+    // ===== ТЕСТ 8: Проверка валидации данных =====
+    console.log('\n--- ТЕСТ 8: Проверка валидации данных ---');
     
-    const vehicle = new Vehicle('Toyota', 'Camry', 2015);
-    vehicle.displayInfo();
-    console.log(`Возраст: ${vehicle.age} лет`);
+    try {
+        new Vehicle('', 'Model', 2020); // пустая строка make
+        console.assert(false, 'Не поймана ошибка пустого make');
+    } catch (e) {
+        console.assert(e.message.includes('make'), 'Неправильное сообщение ошибки для make');
+        console.log('✅ Валидация make работает');
+    }
+    
+    try {
+        new Vehicle('Make', '', 2020); // пустая строка model
+        console.assert(false, 'Не поймана ошибка пустого model');
+    } catch (e) {
+        console.assert(e.message.includes('model'), 'Неправильное сообщение ошибки для model');
+        console.log('✅ Валидация model работает');
+    }
+    
+    try {
+        new Vehicle('Make', 'Model', 'not_a_number'); // не число year
+        console.assert(false, 'Не поймана ошибка неправильного типа year');
+    } catch (e) {
+        console.assert(e.message.includes('year'), 'Неправильное сообщение ошибки для year');
+        console.log('✅ Валидация типа year работает');
+    }
+    
+    try {
+        new Vehicle('Make', 'Model', new Date().getFullYear() + 1); // год в будущем
+        console.assert(false, 'Не поймана ошибка года в будущем');
+    } catch (e) {
+        console.assert(e.message.includes('больше'), 'Неправильное сообщение ошибки для будущего года');
+        console.log('✅ Валидация будущего года работает');
+    }
+    
+    try {
+        new Car('Make', 'Model', 2020, 'not_a_number'); // не число numDoors
+        console.assert(false, 'Не поймана ошибка неправильного типа numDoors');
+    } catch (e) {
+        console.assert(e.message.includes('numDoors'), 'Неправильное сообщение ошибки для numDoors');
+        console.log('✅ Валидация типа numDoors работает');
+    }
+    
+    try {
+        new Car('Make', 'Model', 2020, 0); // отрицательное numDoors
+        console.assert(false, 'Не поймана ошибка отрицательного numDoors');
+    } catch (e) {
+        console.assert(e.message.includes('положительным'), 'Неправильное сообщение ошибки для отрицательного numDoors');
+        console.log('✅ Валидация положительного numDoors работает');
+    }
+    
+    try {
+        new ElectricCar('Make', 'Model', 2020, 4, 'not_a_number'); // не число batteryCapacity
+        console.assert(false, 'Не поймана ошибка неправильного типа batteryCapacity');
+    } catch (e) {
+        console.assert(e.message.includes('batteryCapacity'), 'Неправильное сообщение ошибки для batteryCapacity');
+        console.log('✅ Валидация типа batteryCapacity работает');
+    }
+    
+    try {
+        new ElectricCar('Make', 'Model', 2020, 4, -1); // отрицательное batteryCapacity
+        console.assert(false, 'Не поймана ошибка отрицательного batteryCapacity');
+    } catch (e) {
+        console.assert(e.message.includes('отрицательным'), 'Неправильное сообщение ошибки для отрицательного batteryCapacity');
+        console.log('✅ Валидация неотрицательного batteryCapacity работает');
+    }
+    
+    try {
+        createVehicleFactory('not_a_function'); // не функция vehicleType
+        console.assert(false, 'Не поймана ошибка неправильного типа vehicleType');
+    } catch (e) {
+        console.assert(e.message.includes('конструктором'), 'Неправильное сообщение ошибки для vehicleType');
+        console.log('✅ Валидация vehicleType работает');
+    }
+    
+    try {
+        Vehicle.compareAge(null, vehicle1); // null vehicle
+        console.assert(false, 'Не поймана ошибка null vehicle');
+    } catch (e) {
+        console.assert(e.message.includes('существовать'), 'Неправильное сообщение ошибки для null vehicle');
+        console.log('✅ Валидация существования vehicles работает');
+    }
 
-    const testCar = new Car('Honda', 'Civic', 2018, 4);
-    testCar.displayInfo();
-    testCar.honk();
+    // ===== ТЕСТ 9: Дополнительные проверки функционала =====
+    console.log('\n--- ТЕСТ 9: Дополнительные проверки функционала ---');
+    
+    const demoVehicle = new Vehicle('Toyota', 'Camry', 2015);
+    demoVehicle.displayInfo();
+    console.log(`Возраст: ${demoVehicle.age} лет`);
 
-    const testElectricCar = new ElectricCar('Tesla', 'Model 3', 2020, 4, 75);
-    testElectricCar.displayInfo();
-    console.log(`Запас хода: ${testElectricCar.calculateRange()} км`);
+    const demoCar = new Car('Honda', 'Civic', 2018, 4);
+    demoCar.displayInfo();
+    demoCar.honk();
+
+    const demoElectricCar = new ElectricCar('Tesla', 'Model 3', 2020, 4, 75);
+    demoElectricCar.displayInfo();
+    console.log(`Запас хода: ${demoElectricCar.calculateRange()} км`);
     
-    const testVehicle = new Vehicle('Test', 'Model', 2010);
-    console.assert(testVehicle.age === (new Date().getFullYear() - 2010), 'Тест возраста провален');
+    const demoTestVehicle = new Vehicle('Test', 'Model', 2010);
+    console.assert(demoTestVehicle.age === (new Date().getFullYear() - 2010), 'Тест возраста провален');
     
-    const createCarTestFactory = createVehicleFactory(Car);
-    const myNewCar = createCarTestFactory('BMW', 'X5', 2022, 4);
-    console.log('Создан новый автомобиль:');
-    myNewCar.displayInfo();
+    const createDemoCarFactory = createVehicleFactory(Car);
+    const demoFactoryCar = createDemoCarFactory('BMW', 'X5', 2022, 4);
+    console.log('Создан новый автомобиль через фабрику:');
+    demoFactoryCar.displayInfo();
     
-    console.log('Всего создано транспортных средств:', Vehicle.getTotalVehicles());
+    console.log(`Всего создано транспортных средств: ${Vehicle.getTotalVehicles()}`);
 
     // ===== ФИНАЛЬНАЯ СТАТИСТИКА =====
     console.log('\n=== ФИНАЛЬНАЯ СТАТИСТИКА ===');
