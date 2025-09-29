@@ -2,6 +2,7 @@
 
 // ===== ЗАДАНИЕ 1: Базовый класс Vehicle =====
 class Vehicle {
+    static vehicleCount = 0;
 
     constructor(make, model, year) {
         Vehicle.vehicleCount++;
@@ -15,6 +16,9 @@ class Vehicle {
         this.model = model;
 
         const currentYear = new Date().getFullYear();
+        if (year < 1886) {
+            throw new Error("Год выпуска не может быть меньше 1886 (год изобретения автомобиля)");
+        }
         if (year > currentYear) {
             throw new Error("Год выпуска не может быть больше текущего");
         }
@@ -32,6 +36,9 @@ class Vehicle {
     set year(newYear) {
         if (typeof newYear !== 'number') throw new Error('year должен быть числом');
         const currentYear = new Date().getFullYear();
+        if (newYear < 1886) {
+            throw new Error("год не может быть меньше 1886");
+        }
         if (newYear > currentYear) {
             throw new Error("год не может быть больше текущего");
         }
@@ -48,6 +55,10 @@ class Vehicle {
             throw new Error('У транспортных средств должен быть числовой возраст');
         }
         return Math.abs(vehicle1.age - vehicle2.age);
+    }
+
+    static getTotalVehicles() {
+        return Vehicle.vehicleCount;
     }
 }
 
@@ -105,9 +116,6 @@ const createVehicleFactory = (vehicleType) => {
         return new vehicleType(...args);
     };
 };
-
-Vehicle.vehicleCount = 0;		
-Vehicle.getTotalVehicles = () => Vehicle.vehicleCount;
 
 // ===== ТЕСТЫ =====
 function runTests() {
@@ -245,10 +253,10 @@ function runTests() {
     console.assert(currentYearVehicle.age === 0, 'Возраст текущего года должен быть 0');
     console.log(`Возраст ТС текущего года: ${currentYearVehicle.age}`);
     
-    const oldVehicle = new Vehicle('Old', 'Vehicle', 1900);
-    const oldAge = currentYear - 1900;
+    const oldVehicle = new Vehicle('Benz', 'Patent-Motorwagen', 1886);
+    const oldAge = currentYear - 1886;
     console.assert(oldVehicle.age === oldAge, 'Неправильный расчет возраста старого ТС');
-    console.log(`Возраст старого ТС (1900г.): ${oldVehicle.age} лет`);
+    console.log(`Возраст первого автомобиля (1886г.): ${oldVehicle.age} лет`);
     
     const zeroRangeEV = new ElectricCar('Zero', 'Range', 2020, 4, 0);
     console.assert(zeroRangeEV.calculateRange() === 0, 'Запас хода с нулевой батареей должен быть 0');
@@ -287,6 +295,23 @@ function runTests() {
     } catch (e) {
         console.assert(e.message.includes('больше'), 'Неправильное сообщение ошибки для будущего года');
         console.log('✅ Валидация будущего года работает');
+    }
+    
+    try {
+        new Vehicle('Make', 'Model', 1885); // год меньше 1886
+        console.assert(false, 'Не поймана ошибка года меньше 1886');
+    } catch (e) {
+        console.assert(e.message.includes('1886'), 'Неправильное сообщение ошибки для года меньше 1886');
+        console.log('✅ Валидация минимального года работает');
+    }
+    
+    try {
+        const testVehicle = new Vehicle('Test', 'Model', 2020);
+        testVehicle.year = 1800; // установка года меньше 1886 через сеттер
+        console.assert(false, 'Не поймана ошибка установки года меньше 1886 через сеттер');
+    } catch (e) {
+        console.assert(e.message.includes('1886'), 'Неправильное сообщение ошибки для сеттера года меньше 1886');
+        console.log('✅ Валидация минимального года в сеттере работает');
     }
     
     try {
