@@ -5,24 +5,16 @@ class Vehicle {
     static vehicleCount = 0;
 
     constructor(make, model, year) {
-        Vehicle.vehicleCount++;
-
         // Проверки типов данных
         if (typeof make !== 'string' || !make) throw new Error('make должно быть непустой строкой');
         if (typeof model !== 'string' || !model) throw new Error('model должна быть непустой строкой');
-        if (typeof year !== 'number') throw new Error('year должен быть числом');
 
         this.make = make;
         this.model = model;
+        this.year = year;
 
-        const currentYear = new Date().getFullYear();
-        if (year < 1886) {
-            throw new Error("Год выпуска не может быть меньше 1886 (год изобретения автомобиля)");
-        }
-        if (year > currentYear) {
-            throw new Error("Год выпуска не может быть больше текущего");
-        }
-        this._year = year;
+        Vehicle.vehicleCount++;
+        
     }
 
     displayInfo() {
@@ -65,12 +57,11 @@ class Vehicle {
 // ===== ЗАДАНИЕ 2: Класс Car =====
 class Car extends Vehicle {
     constructor(make, model, year, numDoors) {
-        super(make, model, year);
-        
         // Проверки типов данных
         if (typeof numDoors !== 'number') throw new Error('numDoors должно быть числом');
         if (numDoors < 1) throw new Error('numDoors должно быть положительным числом');
-        
+
+        super(make, model, year);
         this.numDoors = numDoors;
     }
 
@@ -87,13 +78,12 @@ class Car extends Vehicle {
 
 // ===== ЗАДАНИЕ 3: Класс ElectricCar =====
 class ElectricCar extends Car {
-    constructor(make, model, year, numDoors, batteryCapacity) {
-        super(make, model, year, numDoors);
-        
+    constructor(make, model, year, numDoors, batteryCapacity) {        
         // Проверки типов данных
         if (typeof batteryCapacity !== 'number') throw new Error('batteryCapacity должно быть числом');
         if (batteryCapacity < 0) throw new Error('batteryCapacity не может быть отрицательным');
         
+        super(make, model, year, numDoors);
         this.batteryCapacity = batteryCapacity;
     }
 
@@ -386,7 +376,43 @@ function runTests() {
     demoFactoryCar.displayInfo();
     
     console.log(`Всего создано транспортных средств: ${Vehicle.getTotalVehicles()}`);
+    
+    //пытаемся создать ещё экземпляры
+    try {new Vehicle('asd', 'asd', 1500)}
+    catch(e){} 
+    try {new Vehicle(123, 'asd', 1900)}
+    catch(e){} 
+    try {new Vehicle('asd', 123, 1900)}
+    catch(e){} 
 
+    try {new Car('asd', 'asd', 1500, 2)}
+    catch(e){} 
+    try {new Car(123, 'asd', 1900, 2)}
+    catch(e){} 
+    try {new Car('asd', 123, 1900, 2)}
+    catch(e){}
+    try {new Car('asd', 'asd', 1900, 'asd')}
+    catch(e){}
+    try {new Car('asd', 'asd', 1900, 0)}
+    catch(e){} 
+
+
+    try {new ElectricCar('asd', 'asd', 1500, 2, 222)}
+    catch(e){} 
+    try {new ElectricCar(123, 'asd', 1900, 2, 222)}
+    catch(e){} 
+    try {new ElectricCar('asd', 123, 1900, 2, 222)}
+    catch(e){}
+    try {new ElectricCar('asd', 'asd', 1900, 'asd', 222)}
+    catch(e){}
+    try {new ElectricCar('asd', 'asd', 1900, 0, 222)}
+    catch(e){} 
+    try {new ElectricCar('asd', 'asd', 1900, 2, 'asd')}
+    catch(e){} 
+    try {new ElectricCar('asd', 'asd', 1900, 2, -1)}
+    catch(e){} 
+    console.assert(Vehicle.getTotalVehicles() == 21, 'ошибка в итоговом кол-ве созданных экземпляров')
+    
     // ===== ФИНАЛЬНАЯ СТАТИСТИКА =====
     console.log('\n=== ФИНАЛЬНАЯ СТАТИСТИКА ===');
     const finalCount = Vehicle.getTotalVehicles();
