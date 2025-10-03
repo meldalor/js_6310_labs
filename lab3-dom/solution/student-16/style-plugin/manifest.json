@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Dark it: Неунывающая классика для вечернего просмотра",
+  "version": "1.0",
+  "description": "Элегантная темная тема для комфортного вечернего просмотра сайта KAI. Сохраняет выбор темы и поддерживает горячие клавиши.",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://kai.ru/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
