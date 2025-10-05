@@ -16,39 +16,39 @@ function initDarkMode() {
                 --dark-bg-tertiary: #2a2a2a;
                 --dark-text-primary: #e0e0e0;
                 --dark-text-secondary: #b0b0b0;
-                --dark-accent: #4a7c7e;
+                --dark-accent: #2d56ac;
                 --dark-link: #64b5f6;
                 --dark-border: #333333;
             }
-            
+
             body.dark-mode {
                 background-color: var(--dark-bg-primary) !important;
                 color: var(--dark-text-primary) !important;
             }
-            
             .dark-mode #page_wrapper {
-                background-color: var(--dark-bg-primary) !important;
+                background-color: var(--dark-bg-secondary) !important;
                 color: var(--dark-text-primary) !important;
             }
-            
+
+            /* Header / Menu*/
             .dark-mode header {
                 background-color: var(--dark-bg-secondary) !important;
-                border-bottom: 1px solid var(--dark-border) !important;
             }
-            
             .dark-mode .menu {
                 background-color: var(--dark-bg-secondary) !important;
             }
-            
+            .dark-mode .menu-list {
+                background-color: var(--dark-accent);
+            }
             .dark-mode .menu-list a {
                 color: var(--dark-text-primary) !important;
             }
-            
             .dark-mode .menu-list a:hover {
                 background-color: var(--dark-bg-tertiary) !important;
                 color: var(--dark-accent) !important;
             }
-            
+
+            /* сontent boxes */
             .dark-mode .main_slider_holder,
             .dark-mode .news_box,
             .dark-mode .events_box,
@@ -57,63 +57,114 @@ function initDarkMode() {
             .dark-mode .welcome_box {
                 background: var(--dark-bg-secondary) !important;
             }
-            
-            .dark-mode .item {
-                background-color: var(--dark-bg-tertiary) !important;
-                border: 1px solid var(--dark-border) !important;
+
+            .dark-mode .research_box .tab_items {
+                background: transparent !important;
             }
-            
-            .dark-mode .item:hover {
-                background-color: #353535 !important;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+            .dark-mode .institutes_slider_box {
+                background: var(--dark-bg-tertiary) !important;
             }
-            
+            .dark-mode .inst-slide {
+                background-color: var(--dark-border);
+            }
+            .dark-mode .news_box.samples .item .pic:before,
+            .dark-mode .box_items .item .desc {
+                border-color: var(--dark-border) !important;
+            }
+            .dark-mode .box_items .item:hover .desc {
+                border-color: transparent !important;
+            }
+            .dark-mode .welcome_box .list .item .desc,
+            .dark-mode .welcome_box .list .item:hover .desc {
+                border-color: var(--dark-border) !important;
+            }
+            .dark-mode .events_box .list .item .desc:before {
+                border-color: var(--dark-border);
+            }
+            .dark-mode .events_box .list .item:hover .desc:before {
+                border-color: var(--dark-accent) !important;
+            }
+            .dark-mode .box_items .item:hover,
+            .dark-mode .welcome_box .list .item:hover {
+                border-color: var(--dark-accent) !important;
+            }
+
+            .dark-mode .events_items .item{
+                background-color: transparent !important;
+            }
+
+            /* Descriptions & Text */
+            .dark-mode .desc {
+                background-color: inherit !important;
+            }
+            .dark-mode .tabs .desc {
+                background: rgba(0, 0, 0, 0.4) !important;
+            }
             .dark-mode .desc p,
             .dark-mode h1,
             .dark-mode h2,
             .dark-mode h3 {
                 color: var(--dark-text-primary) !important;
             }
+            .dark-mode .kai_page p {
+                color: var(--dark-text-secondary);
+            }
+
+            .dark-mode .events_items .item .desc .date, .dark-mode .events_items .item .desc .time {
+                color: var(--dark-text-primary) !important;
+            }
             
+
+            /* Links */
             .dark-mode a {
                 color: var(--dark-link) !important;
             }
-            
             .dark-mode a:hover {
-                color: var(--dark-accent) !important;
+                color: white !important;
             }
-            
+
+            /* Buttons */
             .dark-mode .kai-btn,
             .dark-mode .kai-btn-block {
-                background-color: var(--dark-accent) !important;
-                color: white !important;
-                border: none !important;
+                background-color: var(--dark-bg-secondary) !important;
+                color: var(--dark-accent) !important;
+                border-color: var(--dark-accent) !important;
             }
-            
             .dark-mode .kai-btn:hover,
             .dark-mode .kai-btn-block:hover {
-                background-color: #5a8c8e !important;
+                background-color: var(--dark-accent) !important;
+                color: white !important;
+            }
+
+            .dark-mode #btns .slick-disabled {
+                background-color: transparent !important;
+                color: var(--dark-border) !important;
+                border-color: var(--dark-border) !important;
             }
             
+            .dark-mode .research_box .tab_items .nav a {
+                background-color: transparent;
+                border-color: var(--dark-accent);
+            }
+            .dark-mode .research_box .tab_items .nav a.active {
+                background-color: var(--dark-accent);
+            }
+
+            .dark-mode .research_box .tab_items .nav a:hover {
+                background-color: var(--dark-accent) !important;
+            }
+
+            /* Footer */
             .dark-mode footer {
-                background-color: var(--dark-bg-secondary) !important;
                 border-top: 1px solid var(--dark-border) !important;
             }
-            
+
+            /* Forms */
             .dark-mode .search_text {
                 background-color: var(--dark-bg-tertiary) !important;
                 color: var(--dark-text-primary) !important;
                 border: 1px solid var(--dark-border) !important;
             }
-            
-            .dark-mode .slick-dots li button {
-                background-color: var(--dark-text-secondary) !important;
-            }
-            
-            .dark-mode .slick-dots .slick-active button {
-                background-color: var(--dark-accent) !important;
-            }
-            
             .dark-mode input,
             .dark-mode select,
             .dark-mode textarea {
@@ -121,22 +172,54 @@ function initDarkMode() {
                 color: var(--dark-text-primary) !important;
                 border: 1px solid var(--dark-border) !important;
             }
-            
-            .dark-mode .portlet-content {
+
+            /* Slick Carousel */
+            .dark-mode .slick-dots li button {
+                background-color: var(--dark-text-secondary) !important;
+            }
+            .dark-mode .slick-dots .slick-active button {
+                background-color: var(--dark-accent) !important;
+            }
+
+            /* AUI Portlet & Breadcrumb */
+            .aui .portlet {
                 background-color: transparent !important;
             }
-            
-            .dark-mode img {
-                opacity: 0.9;
+            .dark-mode .aui .portlet {
+                background: none !important;
             }
-            
-            .dark-mode img:hover {
-                opacity: 1;
+            .aui header .menu ul li .sub,
+            .aui header .menu .menu-list > li:hover > a,
+            .aui header .menu .menu-list > li.open {
+                background: var(--dark-bg-tertiary) !important; 
             }
-        `;
+            .aui .breadcrumb {
+                background-color: var(--dark-bg-tertiary);
+            }
+
+            /* Layouts */
+            .dark-mode .layouts li {
+                background-color: transparent !important;
+            }
+            .dark-mode .layouts li.selected,
+            .layouts li.selected li {
+            }
+            .dark-mode .layouts li.selected li {
+                border-color: var(--dark-bg-tertiary);
+            }
+            .dark-mode .layouts > li > a:hover,
+            .dark-mode .layouts > li > a:focus {
+                background-color: var(--dark-bg-tertiary);
+            }
+            .layouts.level-1 > li.selected,
+            .layouts.all-levels > li.selected {
+                border: none !important;
+            }
+
+        `; 
         
         // Проверяем, не добавлены ли уже стили
-        if (!document.getElementById('dark-mode-styles')) {
+        if (!document.getElementById('dark-mode-styles')) {     
             const styleSheet = document.createElement('style');
             styleSheet.id = 'dark-mode-styles';
             styleSheet.textContent = styles;
@@ -221,6 +304,14 @@ function initDarkMode() {
         button.addEventListener('click', toggleDarkMode);
         
         buttonContainer.appendChild(button);
+        
+        //быстрофикс для авторизованных пользователей
+        const elements = document.querySelectorAll('span');
+        elements.forEach(element => {
+            if (element.textContent.includes('Отображение сетевого контента')) {
+            element.style.display = 'none';
+    }
+  });       
     }
     
     // Инициализация
