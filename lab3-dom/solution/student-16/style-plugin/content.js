@@ -107,11 +107,17 @@ function initDarkMode() {
                 color: var(--dark-text-primary) !important;
             }
             .dark-mode .kai_page p {
-                color: var(--dark-text-secondary);
+                color: var(--dark-text-secondary) !important;
             }
 
             .dark-mode .events_items .item .desc .date, .dark-mode .events_items .item .desc .time {
                 color: var(--dark-text-primary) !important;
+            }
+
+            .dark-mode .alert {
+                background-color: var(--dark-border) !important;
+                border-color: var(--dark-border) !important;
+                text-shadow: none !important;
             }
             
 
