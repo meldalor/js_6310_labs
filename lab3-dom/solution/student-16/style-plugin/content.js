@@ -21,7 +21,7 @@ function initDarkMode() {
                 --dark-border: #333333;
             }
 
-            body.dark-mode {
+            html.dark-mode {
                 background-color: var(--dark-bg-primary) !important;
                 color: var(--dark-text-primary) !important;
             }
@@ -182,19 +182,23 @@ function initDarkMode() {
             }
 
             /* AUI Portlet & Breadcrumb */
-            .aui .portlet {
+            .dark-mode .portlet {
                 background-color: transparent !important;
             }
-            .dark-mode .aui .portlet {
+            .dark-mode .portlet {
                 background: none !important;
             }
-            .aui header .menu ul li .sub,
-            .aui header .menu .menu-list > li:hover > a,
-            .aui header .menu .menu-list > li.open {
+            .dark-mode header .menu ul li .sub,
+            .dark-mode header .menu .menu-list > li:hover > a,
+            .dark-mode header .menu .menu-list > li.open {
                 background: var(--dark-bg-tertiary) !important; 
             }
-            .aui .breadcrumb {
+            .dark-mode .breadcrumb {
                 background-color: var(--dark-bg-tertiary);
+            }
+
+            .dark-mode .portlet-journal-content .portlet-title {
+                background-color: transparent !important;
             }
 
             /* Layouts */
@@ -216,6 +220,15 @@ function initDarkMode() {
                 border: none !important;
             }
 
+            .dark-mode .table-striped tbody>tr:nth-child(odd)>td, .dark-mode .table-striped tbody>tr:nth-child(odd)>th,
+            .dark-mode .table td, .dark-mode .table thead th {
+                background-color: var(--dark-bg-tertiary) !important;
+                border-color: var(--dark-border);
+            }
+
+            .dark-mode .table {
+                border-color: var(--dark-border);
+            }
         `; 
         
         // Проверяем, не добавлены ли уже стили
@@ -226,21 +239,21 @@ function initDarkMode() {
             document.head.appendChild(styleSheet);
         }
         
-        document.body.classList.add('dark-mode');
+        document.documentElement.classList.add('dark-mode');
         localStorage.setItem('kai-dark-mode', 'enabled');
         updateButtonState(true);
     }
     
     // Функция отключения темной темы
     function removeDarkMode() {
-        document.body.classList.remove('dark-mode');
+        document.documentElement.classList.remove('dark-mode');
         localStorage.setItem('kai-dark-mode', 'disabled');
         updateButtonState(false);
     }
     
     // Функция переключения темы
     function toggleDarkMode() {
-        if (document.body.classList.contains('dark-mode')) {
+        if (document.documentElement.classList.contains('dark-mode')) {
             removeDarkMode();
         } else {
             applyDarkMode();
@@ -271,14 +284,14 @@ function initDarkMode() {
         
         const button = document.createElement('div');
         button.id = 'dark-mode-toggle-btn';
-        button.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-        button.title = document.body.classList.contains('dark-mode') ? 'Светлый режим' : 'Темный режим';
+        button.textContent = document.documentElement.classList.contains('dark-mode') ? '☀️' : '🌙';
+        button.title = document.documentElement.classList.contains('dark-mode') ? 'Светлый режим' : 'Темный режим';
         
         Object.assign(button.style, {
             width: '40px',
             height: '40px',
             borderRadius: '50%',
-            backgroundColor: document.body.classList.contains('dark-mode') ? '#2a2a2a' : '#4285f4',
+            backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#2a2a2a' : '#4285f4',
             color: 'white',
             fontSize: '20px',
             cursor: 'pointer',
