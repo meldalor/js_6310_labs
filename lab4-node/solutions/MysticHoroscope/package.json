@@ -1,0 +1,27 @@
+{
+  "name": "mystic-horoscope-bot",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests",
+    "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests --coverage"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "description": "Telegram bot for personal predictions",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.3.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.3.0",
+    "globals": "^15.3.0",
+    "jest": "^29.7.0"
+  }
+}
