@@ -1,1 +1,1 @@
-https://github.com/meldalor/photo-hosting/pull/3
+https://github.com/meldalor/photo-hosting/pull/4
